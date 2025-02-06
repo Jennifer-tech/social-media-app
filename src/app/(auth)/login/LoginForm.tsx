@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form"
 import { login } from "./actions"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import LoadingButton from "@/components/ui/LoadingButton"
+import LoadingButton from "@/components/LoadingButton"
 
 export default function LoginForm() {
     const [error, setError] = useState<string>()

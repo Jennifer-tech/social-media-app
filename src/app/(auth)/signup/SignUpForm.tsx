@@ -12,8 +12,8 @@ import {
 } from "@/components/ui/form";
 import { useState, useTransition } from "react";
 import { signUp } from "./actions";
-import { PasswordInput } from "@/components/ui/PasswordInput";
-import LoadingButton from "@/components/ui/LoadingButton";
+import { PasswordInput } from "@/components/PasswordInput";
+import LoadingButton from "@/components/LoadingButton";
 import { Input } from "@/components/ui/input";
 
 export default function SignUpForm() {
