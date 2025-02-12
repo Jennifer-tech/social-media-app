@@ -1,6 +1,8 @@
 "use client";
-import InfiniteScrollContainer from "@/components/InfiniteScollContainer";
+import InfiniteScrollContainer from "@/components/InfiniteScrollContainer";
+import DeletePostDialog from "@/components/posts/DeletePostDialogue";
 import Post from "@/components/posts/Post";
+import PostsLoadingSkeleton from "@/components/posts/postsLoadingSkeleton";
 import { Button } from "@/components/ui/button";
 import kyInstance from "@/lib/ky";
 import { PostData, PostPage } from "@/lib/types";
@@ -49,7 +51,13 @@ export default function ForYouFeed() {
   console.log("posts", posts);
 
   if (status === "pending") {
-    return <Loader2 className="mx-auto animate-spin" />;
+    return <PostsLoadingSkeleton />;
+  }
+
+  if(status === "success" && !posts.length && !hasNextPage) {
+    return <p className="text-center text-muted-foreground">
+      No one has posted anything yet.
+    </p>
   }
 
   if (status === "error") {
@@ -68,6 +76,11 @@ export default function ForYouFeed() {
         <Post key={post.id} post={post} />
       ))}
       {isFetchingNextPage && <Loader2 className="mx-auto my-3 animate-spin" />}
+      {/* <DeletePostDialog 
+      open
+      onClose={() => {}}
+      post={posts[0]}
+      /> */}
       {/* <Button onClick={() => fetchNextPage()}>Load more</Button> */}
     </InfiniteScrollContainer>
   );

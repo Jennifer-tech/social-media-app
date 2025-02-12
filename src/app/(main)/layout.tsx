@@ -1,4 +1,4 @@
-import { validateRequest } from "@/auth";
+import { validateRequest } from "@/auth.server";
 import { redirect } from "next/navigation";
 import SessionProvider from "./SessionProvider";
 import Navbar from "./Navbar";

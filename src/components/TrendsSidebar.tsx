@@ -1,4 +1,4 @@
-import { validateRequest } from "@/auth";
+import { validateRequest } from "@/auth.server";
 import prisma from "@/lib/prisma";
 import { userDataSelect } from "@/lib/types";
 import { Loader2 } from "lucide-react";
