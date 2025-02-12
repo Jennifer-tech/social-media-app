@@ -1,4 +1,5 @@
-import { validateRequest } from "@/auth";
+// import { validateRequest } from "@/auth.server";
+import { validateRequest } from "@/auth.server";
 import prisma from "@/lib/prisma"
 import { postDataInclude, PostPage } from "@/lib/types"
 import { NextRequest } from "next/server";
@@ -6,6 +7,7 @@ import { NextRequest } from "next/server";
 export async function GET(req: NextRequest) {
     try {
         const cursor = req.nextUrl.searchParams.get("cursor") || undefined;
+        console.log("cursor", cursor)
 
         const pageSize = 10
         
@@ -21,6 +23,7 @@ export async function GET(req: NextRequest) {
             take: pageSize + 1,
             cursor: cursor ? {id: cursor} : undefined
         });
+        console.log("posts", posts)
         const nextCursor = posts.length > pageSize ? posts[pageSize].id : null
         console.log("nextCursor", nextCursor)
         const data: PostPage = {

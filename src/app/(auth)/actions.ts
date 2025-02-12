@@ -1,6 +1,7 @@
 "use server"
 
-import { lucia, validateRequest } from "@/auth"
+import { lucia } from "@/auth"
+import { validateRequest } from "@/auth.server";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
