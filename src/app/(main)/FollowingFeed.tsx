@@ -1,13 +1,13 @@
 "use client";
 import InfiniteScrollContainer from "@/components/InfiniteScrollContainer";
 import Post from "@/components/posts/Post";
-import PostsLoadingSkeleton from "@/components/posts/postsLoadingSkeleton";2
+import PostsLoadingSkeleton from "@/components/posts/postsLoadingSkeleton";
 import kyInstance from "@/lib/ky";
-import { PostData, PostPage } from "@/lib/types";
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { PostPage } from "@/lib/types";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
 
-export default function ForYouFeed() {
+export default function FollowingFeed() {
   const {
     data,
     fetchNextPage,
@@ -15,14 +15,14 @@ export default function ForYouFeed() {
     isFetching,
     isFetchingNextPage,
     status,
-  } = useInfiniteQuery<PostData[]>({
-    queryKey: ["post-feed", "for-you"],
+  } = useInfiniteQuery<PostPage>({
+    queryKey: ["post-feed", "following"],
     queryFn: async ({ pageParam }) => {
       try {
         console.log("Fetching posts with cursor:", pageParam);
         const response = await kyInstance
           .get(
-            "api/posts/for-you",
+            "api/posts/following",
             pageParam ? { searchParams: { cursor: pageParam } } : {},
           )
           .json<PostPage>();
@@ -52,10 +52,12 @@ export default function ForYouFeed() {
     return <PostsLoadingSkeleton />;
   }
 
-  if(status === "success" && !posts.length && !hasNextPage) {
-    return <p className="text-center text-muted-foreground">
-      No one has posted anything yet.
-    </p>
+  if (status === "success" && !posts.length && !hasNextPage) {
+    return (
+      <p className="text-center text-muted-foreground">
+        No posts found, start following people, to see their posts here
+      </p>
+    );
   }
 
   if (status === "error") {
@@ -74,7 +76,6 @@ export default function ForYouFeed() {
         <Post key={post.id} post={post} />
       ))}
       {isFetchingNextPage && <Loader2 className="mx-auto my-3 animate-spin" />}
-      
     </InfiniteScrollContainer>
   );
 }

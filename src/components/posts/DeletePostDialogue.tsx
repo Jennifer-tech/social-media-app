@@ -1,3 +1,4 @@
+import { PostData } from "@/lib/types";
 import LoadingButton from "../LoadingButton";
 import { Button } from "../ui/button";
 import { useDeletePostMutation } from "./mutations";
