@@ -3,11 +3,16 @@ import InfiniteScrollContainer from "@/components/InfiniteScrollContainer";
 import Post from "@/components/posts/Post";
 import PostsLoadingSkeleton from "@/components/posts/postsLoadingSkeleton";2
 import kyInstance from "@/lib/ky";
-import { PostData, PostPage } from "@/lib/types";
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { PostPage } from "@/lib/types";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
 
-export default function ForYouFeed() {
+interface UserPostsProps {
+    userId: string;
+
+}
+
+export default function UserPosts({userId}: UserPostsProps) {
   const {
     data,
     fetchNextPage,
@@ -15,14 +20,14 @@ export default function ForYouFeed() {
     isFetching,
     isFetchingNextPage,
     status,
-  } = useInfiniteQuery<PostData[]>({
-    queryKey: ["post-feed", "for-you"],
-    queryFn: async ({ pageParam }) => {
+  } = useInfiniteQuery<PostPage>({
+    queryKey: ["post-feed", "user-posts", userId],
+    queryFn:  async ({ pageParam }) => {
       try {
         console.log("Fetching posts with cursor:", pageParam);
         const response = await kyInstance
           .get(
-            "api/posts/for-you",
+            `api/users/${userId}/posts`,
             pageParam ? { searchParams: { cursor: pageParam } } : {},
           )
           .json<PostPage>();
@@ -40,12 +45,12 @@ export default function ForYouFeed() {
       return lastPage?.nextCursor ?? null;
     },
   });
-  console.log("Status:", status);
-  console.log("Data:", data);
-  console.log("Fetching Next Page:", isFetchingNextPage);
-  console.log("Has Next Page:", hasNextPage);
+//   console.log("Status:", status);
+//   console.log("Data:", data);
+//   console.log("Fetching Next Page:", isFetchingNextPage);
+//   console.log("Has Next Page:", hasNextPage);
 
-  const posts = data?.pages?.flatMap((page) => page?.posts) || [];
+  const posts = data?.pages?.flatMap((page) => page.posts) || [];
   console.log("posts", posts);
 
   if (status === "pending") {
@@ -54,7 +59,7 @@ export default function ForYouFeed() {
 
   if(status === "success" && !posts.length && !hasNextPage) {
     return <p className="text-center text-muted-foreground">
-      No one has posted anything yet.
+      This user has&apos;t posted anything yet.
     </p>
   }
 
