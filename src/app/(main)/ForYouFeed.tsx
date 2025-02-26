@@ -4,7 +4,7 @@ import Post from "@/components/posts/Post";
 import PostsLoadingSkeleton from "@/components/posts/postsLoadingSkeleton";2
 import kyInstance from "@/lib/ky";
 import { PostData, PostPage } from "@/lib/types";
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
 
 export default function ForYouFeed() {
