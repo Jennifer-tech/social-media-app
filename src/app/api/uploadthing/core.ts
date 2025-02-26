@@ -32,7 +32,7 @@ export const fileRouter = {
         console.log("oldAvatarUrl", oldAvatarUrl)
 
         if(oldAvatarUrl) {
-            const key = oldAvatarUrl.split(`/a/${process.env.NEXT_PUBLIC_UPLOADTHING_APP_ID}/`,
+            const key = oldAvatarUrl.split(`/a/${process.env.UPLOADTHING_APP_ID}/`,
             )[1];
             console.log("🗑 Deleting old avatar:", oldAvatarUrl);
             console.log("🔑 Extracted key:", key);
@@ -42,7 +42,7 @@ export const fileRouter = {
 
         const newAvatarUrl = file.url.replace(
             "/f/",
-            `/a/${process.env.NEXT_PUBLIC_UPLOADTHING_APP_ID}/`,
+            `/a/${process.env.UPLOADTHING_APP_ID}/`,
         )
         // const newAvatarUrl = file.url;
         console.log("newAvatarUrl", newAvatarUrl)
@@ -62,6 +62,31 @@ export const fileRouter = {
       return { avatarUrl: newAvatarUrl }; 
 
     }),
+
+    attachment: f({
+        image: {maxFileSize: "4MB", maxFileCount: 5},
+        video: {maxFileSize: "64MB", maxFileCount: 5}
+    })
+    .middleware(async () => {
+        const {user} = await validateRequest();
+
+        if(!user) throw new UploadThingError("Unauthorized");
+
+        return { }
+    })
+    .onUploadComplete(async ({file}) => {
+        const media = await prisma.media.create({
+            data: {
+                url: file.url.replace(
+                    "/f/",
+                    `/a/${process.env.UPLOADTHING_APP_ID}/`,
+                ),
+                type: file.type.startsWith("image") ? "IMAGE" : "VIDEO"
+            }
+        })
+
+        return {mediaId: media.id}
+    })
     
 } satisfies FileRouter;
 
