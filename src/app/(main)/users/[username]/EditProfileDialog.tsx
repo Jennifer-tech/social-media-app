@@ -32,7 +32,6 @@ import avatarPlaceholder from "@/assets/avatar-placeholder.png";
 import { Camera } from "lucide-react";
 import Resizer from "react-image-file-resizer";
 import CropImageDialog from "@/components/CropImageDialog";
-import { useQueryClient } from "@tanstack/react-query";
 
 interface EditProfileDialogProps {
   user: userData;
@@ -45,7 +44,6 @@ export default function EditProfileDialog({
   open,
   onOpenChange,
 }: EditProfileDialogProps) {
-  const queryClient = useQueryClient();
 
   const form = useForm<UpdateUserProfileValues>({
     resolver: zodResolver(updateUserProfileSchema),
