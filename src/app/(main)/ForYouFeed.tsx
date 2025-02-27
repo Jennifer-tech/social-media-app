@@ -1,9 +1,9 @@
 "use client";
 import InfiniteScrollContainer from "@/components/InfiniteScrollContainer";
 import Post from "@/components/posts/Post";
-import PostsLoadingSkeleton from "@/components/posts/postsLoadingSkeleton";2
+import PostsLoadingSkeleton from "@/components/posts/postsLoadingSkeleton";
 import kyInstance from "@/lib/ky";
-import { PostData, PostPage } from "@/lib/types";
+import { PostPage } from "@/lib/types";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
 
@@ -15,7 +15,7 @@ export default function ForYouFeed() {
     isFetching,
     isFetchingNextPage,
     status,
-  } = useInfiniteQuery<PostData[]>({
+  } = useInfiniteQuery({
     queryKey: ["post-feed", "for-you"],
     queryFn: async ({ pageParam }) => {
       try {

@@ -1,7 +1,7 @@
 "use client";
 import InfiniteScrollContainer from "@/components/InfiniteScrollContainer";
 import Post from "@/components/posts/Post";
-import PostsLoadingSkeleton from "@/components/posts/postsLoadingSkeleton";2
+import PostsLoadingSkeleton from "@/components/posts/postsLoadingSkeleton";
 import kyInstance from "@/lib/ky";
 import { PostPage } from "@/lib/types";
 import { useInfiniteQuery } from "@tanstack/react-query";
@@ -21,7 +21,7 @@ export default function UserPosts({userId}: UserPostsProps) {
     isFetchingNextPage,
     status,
   } = useInfiniteQuery<PostPage>({
-    queryKey: ["post-feed", "user-posts", userId],
+    queryKey: userId ? ["post-feed", "user-posts", userId] : null,
     queryFn:  async ({ pageParam }) => {
       try {
         console.log("Fetching posts with cursor:", pageParam);
@@ -50,7 +50,7 @@ export default function UserPosts({userId}: UserPostsProps) {
 //   console.log("Fetching Next Page:", isFetchingNextPage);
 //   console.log("Has Next Page:", hasNextPage);
 
-  const posts = data?.pages?.flatMap((page) => page.posts) || [];
+  const posts = data?.pages?.flatMap((page) => page?.posts) || [];
   console.log("posts", posts);
 
   if (status === "pending") {
