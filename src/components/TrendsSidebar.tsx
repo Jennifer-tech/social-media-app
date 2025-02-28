@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { validateRequest } from "@/auth.server";
 import prisma from "@/lib/prisma";
 // import { userDataSelect } from "@/lib/types";
@@ -11,6 +12,19 @@ import { formatNumber } from "@/lib/utils";
 import FollowButton from "./FollowButton";
 import { getUserDataSelect } from "@/lib/types";
 import UserTooltip from "./UserTooltip";
+
+interface User {
+  id: string;
+  username: string;
+  displayName: string;
+  avatarUrl: string;
+  _count: {
+    followers: number;
+  };
+  followers: {
+    followerId: string;
+  }[];
+}
 
 export default function TrendsSidebar() {
   return (
@@ -46,9 +60,9 @@ async function WhoToFollow() {
   return (
     <div className="space-y-5 rounded-2xl bg-card p-5 shadow-sm">
       <div className="text-xl font-bold">Who to follow</div>
-      {usersToFollow.map((user) => (
+      {usersToFollow.map((user: User) => (
         <div key={user.id} className="flex items-center justify-between gap-3">
-          <UserTooltip user={user}>
+          <UserTooltip user={user as never}>
 
           <Link
             href={`/users/${user.username}`}
@@ -70,7 +84,7 @@ async function WhoToFollow() {
           initialState={{
             followers: user._count.followers,
             isFollowedByUser: user.followers.some(
-              ({ followerId }) => followerId === user.id
+              ({ followerId }: { followerId: string }) => followerId === user.id
             )
           }}
           />
@@ -92,7 +106,7 @@ const getTrendingTopics = unstable_cache(
         `;
 
     console.log("result", result);
-    return result.map((row) => ({
+    return result.map((row: any) => ({
       hashtag: row.hashtag,
       count: Number(row.count),
     }));
@@ -109,7 +123,7 @@ async function TrendingTopics() {
   return (
     <div className="space-y-5 rounded-2xl bg-card p-5 shadow-sm">
       <div className="text-xl font-bold">Trending topics</div>
-      {trendingTopics.map(({ hashtag, count }) => {
+      {trendingTopics.map(({ hashtag, count }: any) => {
         const title = hashtag?.includes("#") ? hashtag.split("#")[1] : "";
         console.log("title", title);
 
