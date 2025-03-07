@@ -33,7 +33,7 @@ export default function FollowButton({
 
             await queryClient.cancelQueries({ queryKey });
 
-            const previousState= queryClient.getQueryData<FollowerInfo>(queryKey);
+            const previousState = queryClient.getQueryData<FollowerInfo>(queryKey);
 
             queryClient.setQueryData<FollowerInfo>(queryKey, () => ({
                 followers: 
